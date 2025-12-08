@@ -1,6 +1,6 @@
 import React from "react";
 import { Box, Paper, Typography } from "@mui/material";
-import { ForecastPoint } from "../ForecastPlotCard/ForecastPlotCard";
+import type { ForecastPoint } from "../ForecastPlotCard/ForecastPlotCard";
 
 interface RecentForecastsCardProps {
   data: ForecastPoint[];

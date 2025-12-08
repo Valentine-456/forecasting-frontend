@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 
 const DroneControl: React.FC = () => {
-  const [batterySoc, setBatterySoc] = useState("");
+  const [batterySoc, setBatterySoc] = useState("73");
   const [uavMass, setUavMass] = useState("3.5");
   const [maxElevation, setMaxElevation] = useState("120");
   const [payloadWeight, setPayloadWeight] = useState("1.2");

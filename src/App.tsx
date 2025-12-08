@@ -4,11 +4,10 @@ import { CssBaseline, Grid, Typography, Box } from "@mui/material";
 import ModelControl from "./components/ModelControl/ModelControl";
 import DroneControl from "./components/DroneControl/DroneControl";
 import ForecastPlotCard, {
-  ForecastPoint,
+  type ForecastPoint,
 } from "./components/ForecastPlotCard/ForecastPlotCard";
 import RecentForecastsCard from "./components/RecentForecastsCard/RecentForecastsCard";
 import EnvironmentControl from "./components/EnvironmentControl/EnvironmentControl";
-import DiagnosticPlotsCard from "./components/DiagnosticPlotsCard/DiagnosticPlotsCard";
 
 const forecastData: ForecastPoint[] = [
   { time: "00:05", historical: 73.0, forecast: null, ciUpper: null },
@@ -36,18 +35,18 @@ const App: React.FC = () => {
       <Box sx={{ px: 3 }}>
         <Grid container spacing={2}>
           {/* Left column */}
-          <Grid item xs={12} md={3}>
+          <Grid size={{xs:12, md:3}}>
             <DroneControl />
           </Grid>
 
           {/* Middle column */}
-          <Grid item xs={12} md={6}>
+          <Grid size={{xs:12, md:6}}>
             <ForecastPlotCard data={forecastData} />
             <RecentForecastsCard data={forecastData} />
           </Grid>
 
           {/* Right column */}
-          <Grid item xs={12} md={3}>
+          <Grid size={{xs:12, md:3}} >
             <EnvironmentControl/>
           </Grid>
         </Grid>

@@ -7,7 +7,7 @@ import {
   MenuItem,
   Paper,
   Select,
-  SelectChangeEvent,
+  type SelectChangeEvent,
   Typography,
   IconButton,
 } from "@mui/material";
@@ -19,7 +19,6 @@ import {
   XAxis,
   YAxis,
   CartesianGrid,
-  Tooltip,
   Legend,
 } from "recharts";
 import DownloadIcon from "@mui/icons-material/Download";
@@ -118,18 +117,12 @@ const ForecastPlotCard: React.FC<ForecastPlotCardProps> = ({ data }) => {
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="time" />
             <YAxis domain={[0, 100]} tickFormatter={(v) => `${v}%`} />
-            <Tooltip
-              formatter={(value: number | null) =>
-                value == null ? "" : `${value}%`
-              }
-            />
             <Legend />
 
             {/* Confidence interval (from forecast up to ciUpper) */}
             <Area
               type="monotone"
               dataKey="ciUpper"
-              stroke={false}
               fill="url(#ciFill)"
               name="Confidence interval"
               isAnimationActive={false}

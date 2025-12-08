@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, FormControl, InputLabel, MenuItem, Paper, Select, SelectChangeEvent } from "@mui/material";
+import { Box, FormControl, InputLabel, MenuItem, Paper, Select, type SelectChangeEvent } from "@mui/material";
 
 interface ModelControlProps {
   model?: string;
