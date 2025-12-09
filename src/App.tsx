@@ -1,5 +1,5 @@
 import "./App.css";
-import React from "react";
+import React, { useState } from "react";
 import { CssBaseline, Grid, Typography, Box } from "@mui/material";
 import ModelControl from "./components/ModelControl/ModelControl";
 import DroneControl from "./components/DroneControl/DroneControl";
@@ -8,17 +8,41 @@ import ForecastPlotCard, {
 } from "./components/ForecastPlotCard/ForecastPlotCard";
 import RecentForecastsCard from "./components/RecentForecastsCard/RecentForecastsCard";
 import EnvironmentControl from "./components/EnvironmentControl/EnvironmentControl";
-
-const forecastData: ForecastPoint[] = [
-  { time: "00:05", historical: 73.0, forecast: null, ciUpper: null },
-  { time: "00:10", historical: 72.7, forecast: null, ciUpper: null },
-  { time: "00:15", historical: 72.4, forecast: 72.1, ciUpper: 80 },
-  { time: "00:20", historical: null, forecast: 71.8, ciUpper: 82 },
-  { time: "00:25", historical: null, forecast: 71.4, ciUpper: 84 },
-  { time: "00:30", historical: null, forecast: 71.1, ciUpper: 86 },
-];
+import { runForecast } from "./api/forecastAPI";
 
 const App: React.FC = () => {
+  const [modelId, setModelId] = useState<string>("mlr_battery_current");
+  const [horizon, setHorizon] = useState<string>("60");
+  const [plotData, setPlotData] = useState<ForecastPoint[]>([]);
+  const [droneValues, setDroneValues] = useState({
+    soc_percentage: "73",
+    payload: "1.2",
+    battery_capacity_mAh: "4400",
+  });
+
+  const updateDrone = (field: string, value: string) => {
+    setDroneValues((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const handleRunForecast = async () => {
+      const response = await runForecast(modelId, Number(horizon), {
+        soc_percentage: Number(droneValues.soc_percentage),
+        wind_speed: 20, // temporary
+        payload: Number(droneValues.payload),
+        battery_capacity_mAh: Number(droneValues.battery_capacity_mAh),
+      });
+
+      const newData = response.points.map((p) => ({
+        time: new Date(p.timestamp).toLocaleTimeString(),
+        historical: null,
+        forecast: p.value,
+        ciUpper: p.value + 5,
+      }));
+
+    setPlotData(newData);
+  }
+
+
   return (
     <>
       <CssBaseline />
@@ -28,7 +52,12 @@ const App: React.FC = () => {
         <Typography variant="h6" fontWeight={700} sx={{ mb: 1 }}>
           UAV Forecast Dashboard
         </Typography>
-        <ModelControl />
+        <ModelControl 
+          model={modelId}
+          horizon={horizon}
+          onModelChange={setModelId}
+          onHorizonChange={setHorizon}
+        />
       </Box>
 
       {/* Full width layout */}
@@ -36,13 +65,16 @@ const App: React.FC = () => {
         <Grid container spacing={2}>
           {/* Left column */}
           <Grid size={{xs:12, md:3}}>
-            <DroneControl />
+            <DroneControl
+              {...droneValues}
+              onChange={updateDrone}
+            />
           </Grid>
 
           {/* Middle column */}
           <Grid size={{xs:12, md:6}}>
-            <ForecastPlotCard data={forecastData} />
-            <RecentForecastsCard data={forecastData} />
+            <ForecastPlotCard data={plotData} onRunForecast={handleRunForecast} />
+            <RecentForecastsCard data={plotData} />
           </Grid>
 
           {/* Right column */}

@@ -32,18 +32,14 @@ export type ForecastPoint = {
 
 interface ForecastPlotCardProps {
   data: ForecastPoint[];
+  onRunForecast: () => void;
 }
 
-const ForecastPlotCard: React.FC<ForecastPlotCardProps> = ({ data }) => {
+const ForecastPlotCard: React.FC<ForecastPlotCardProps> = ({ data, onRunForecast }) => {
   const [parameter, setParameter] = useState("batterySoc");
 
   const handleParameterChange = (e: SelectChangeEvent) => {
     setParameter(e.target.value as string);
-  };
-
-  const handleRunForecast = () => {
-    // TODO: call your backend and update data
-    console.log("Run forecast clicked");
   };
 
   const handleDownload = () => {
@@ -90,7 +86,7 @@ const ForecastPlotCard: React.FC<ForecastPlotCardProps> = ({ data }) => {
             </Select>
           </FormControl>
 
-          <Button variant="contained" onClick={handleRunForecast}>
+          <Button variant="contained" onClick={onRunForecast}>
             Run forecast
           </Button>
 

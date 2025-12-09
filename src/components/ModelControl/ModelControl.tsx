@@ -1,5 +1,8 @@
 import React from "react";
 import { Box, FormControl, InputLabel, MenuItem, Paper, Select, type SelectChangeEvent } from "@mui/material";
+import { useQuery } from "@tanstack/react-query";
+import { fetchModels } from "../../api/forecastAPI";
+import type { ForecastModel } from "../../dto/forecastDto";
 
 interface ModelControlProps {
   model?: string;
@@ -8,7 +11,18 @@ interface ModelControlProps {
   onHorizonChange?: (value: string) => void;
 }
 
-export const ModelControl: React.FC<ModelControlProps> = (props: ModelControlProps) => {
+export const ModelControl: React.FC<ModelControlProps> = ({
+  model,
+  horizon,
+  onModelChange,
+  onHorizonChange,
+}) => {
+
+  const { data: models, isLoading } = useQuery({
+    queryKey: ["models"],
+    queryFn: fetchModels,
+  });
+
   return (
     <Paper
       elevation={1}
@@ -42,27 +56,32 @@ export const ModelControl: React.FC<ModelControlProps> = (props: ModelControlPro
       <FormControl size="small" sx={{ minWidth: 120 }}>
         <InputLabel>Model</InputLabel>
         <Select
-          value={props.model}
-          label="Chosen model"
-          onChange={(e: SelectChangeEvent) => props.onModelChange?.(e.target.value)}
+          value={model ?? ""}
+          label="Model"
+          onChange={(e) => onModelChange?.(e.target.value)}
+          
         >
-          <MenuItem value="MLR">MLR</MenuItem>
-          <MenuItem value="ARIMAX">ARIMAX</MenuItem>
-          <MenuItem value="VAR">VAR</MenuItem>
-          <MenuItem value="LSTM">LSTM</MenuItem>
+          {isLoading && <MenuItem>Loading…</MenuItem>}
+
+          {models?.map((m: ForecastModel) => (
+            <MenuItem key={m.id} value={m.id}>
+              {m.name} {m.version}
+            </MenuItem>
+          ))}
         </Select>
+
       </FormControl>
 
       <FormControl size="small" sx={{ minWidth: 160 }}>
         <InputLabel>Forecast horizon</InputLabel>
         <Select
-          value={props.horizon}
+          value={horizon}
           label="Forecast horizon"
-          onChange={(e: SelectChangeEvent) => props.onHorizonChange?.(e.target.value)}
+          onChange={(e: SelectChangeEvent) => onHorizonChange?.(e.target.value)}
         >
-          <MenuItem value="1min">1 min</MenuItem>
-          <MenuItem value="2min">2 min</MenuItem>
-          <MenuItem value="5min">5 min</MenuItem>
+          <MenuItem value="60">1 min</MenuItem>
+          <MenuItem value="120">2 min</MenuItem>
+          <MenuItem value="300">5 min</MenuItem>
         </Select>
       </FormControl>
       </Box>
