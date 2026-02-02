@@ -26,7 +26,6 @@ const EnvironmentControl: React.FC = () => {
       </Typography>
 
       <Stack spacing={2}>
-        {/* Wind speed */}
         <Box>
           <Typography
             variant="body2"
@@ -49,7 +48,6 @@ const EnvironmentControl: React.FC = () => {
           />
         </Box>
 
-        {/* Wind direction */}
         <Box>
           <Typography
             variant="body2"
@@ -70,7 +68,6 @@ const EnvironmentControl: React.FC = () => {
           />
         </Box>
 
-        {/* External temperature */}
         <Box>
           <Typography
             variant="body2"

@@ -29,7 +29,6 @@ const DroneControl: React.FC<DroneControlProps> = ({
       </Typography>
 
       <Stack spacing={2}>
-        {/* Battery SOC */}
         <Box>
           <Typography variant="body2" sx={{ mb: 0.5 }} fontWeight={500}>
             Current battery SoC (%)
@@ -43,7 +42,6 @@ const DroneControl: React.FC<DroneControlProps> = ({
           />
         </Box>
 
-        {/* Payload */}
         <Box>
           <Typography variant="body2" sx={{ mb: 0.5 }} fontWeight={500}>
             Payload weight
@@ -59,7 +57,6 @@ const DroneControl: React.FC<DroneControlProps> = ({
           />
         </Box>
 
-        {/* Battery capacity */}
         <Box>
           <Typography variant="body2" sx={{ mb: 0.5 }} fontWeight={500}>
             Battery capacity
